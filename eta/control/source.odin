@@ -48,9 +48,9 @@ deinit_manager :: proc(mgr: ^Manager) {
 		deinit_source(&src)
 	}
 
-	for key, _ in mgr.sources.table {
-		temp_key := key
-		deinit_source(&temp_key)
+	for source, _ in mgr.sources.table {
+		no_move := source
+		deinit_source(&no_move)
 	}
 
 	deinit_index_set(Source, &mgr.sources)
