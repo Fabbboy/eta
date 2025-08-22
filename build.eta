@@ -4,18 +4,23 @@ let
 
     builtin = import "builtin"
     progs = builtin.progs
+
+    project = "eta"
     
     work_dir = builtin.cwd
-    src_dir = work_dir ++ "/eta"
-    eta_bin = work_dir ++ "/eta.exe"
+    src_dir = work_dir ++ "/" ++ project
+    eta_bin = work_dir ++ "/" ++ project ++ ".exe"
 
     odin_bin = builtin.find_program("odin")
     rm = progs.rm
 
     build = builtin.run([
-        odin_bin.path(), "build", src_dir, "-out:{eta_bin}"
+        odin_bin.path(), 
+        "build", src_dir,
+        "-collection:{project}={src_dir}",
+        "-out:{eta_bin}"
     ])
-    
+
     clean = rm(eta_bin)
     run = builtin.run(eta_bin)
 in 
