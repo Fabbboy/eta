@@ -7,12 +7,12 @@ Index :: struct {
 }
 
 Index_Set :: struct($T: typeid) {
-	values: []T,
+	values: [dynamic]T,
 	table:  map[T]Index,
 }
 
 init_index_set :: proc($T: typeid) -> Index_Set(T) {
-	return Index_Set(T){values = make([dynamic]T)[:], table = make(map[T]Index)}
+	return Index_Set(T){values = make([dynamic]T), table = make(map[T]Index)}
 }
 
 deinit_index_set :: proc($T: typeid, set: ^Index_Set(T)) {
