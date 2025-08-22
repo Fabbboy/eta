@@ -47,6 +47,11 @@ deinit_manager :: proc(mgr: ^Manager) {
 	for &src in mgr.sources.values {
 		deinit_source(&src)
 	}
-	//TODO: cleanup hashmap too
+
+	for key, _ in mgr.sources.table {
+		temp_key := key
+		deinit_source(&temp_key)
+	}
+
 	deinit_index_set(Source, &mgr.sources)
 }
