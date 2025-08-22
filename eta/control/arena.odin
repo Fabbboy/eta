@@ -4,7 +4,7 @@ import "core:mem"
 
 Arena_Chunk :: struct($SIZE: u64) {
 	next: ^Arena_Chunk(SIZE),
-	data: [$SIZE]u8,
+	data: [SIZE]u8,
     used: u64,  
 }
 
