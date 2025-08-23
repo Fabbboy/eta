@@ -2,17 +2,15 @@ let
     # can't <str> + <str>
     # use concat operator `++`
 
-    builtin = import "builtin"
-    progs = builtin.progs
+    builtin = import :builtin
 
-    project = "eta"
+    project = :eta
     
     work_dir = builtin.cwd
     src_dir = work_dir ++ "/" ++ project
     eta_bin = work_dir ++ "/" ++ project ++ ".exe"
 
     odin_bin = builtin.find_program("odin")
-    rm = progs.rm
 
     build = builtin.run([
         odin_bin.path(), 
@@ -20,8 +18,6 @@ let
         "-collection:{project}={src_dir}",
         "-out:{eta_bin}"
     ])
-
-    clean = rm(eta_bin)
     run = builtin.run(eta_bin)
 in 
- {build, clean, run}
+ {build, run}
