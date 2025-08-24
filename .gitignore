@@ -1,1 +1,21 @@
+# Build outputs
+out/
 *.exe
+*.o
+*.so
+*.a
+
+# Debug files
+*.dSYM/
+*.pdb
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
