@@ -8,7 +8,7 @@ let
     
     work_dir = builtin.cwd;
     src_dir = work_dir ++ "/" ++ project;
-    eta_bin = work_dir ++ "/" ++ project ++ ".exe";
+    eta_bin_path = work_dir ++ "/" ++ project ++ ".exe";
 
     odin_bin = builtin.find_program("odin");
 
@@ -16,16 +16,16 @@ let
         odin_bin.path(), 
         "build", src_dir,
         "-collection:{project}={src_dir}",
-        "-out:{eta_bin}"
-    ]                       # command beeing ran 
-    |> execute              # runs the commands and returns success status
-    |> produces eta_bin;    # checks if the file exists if yes successfully returns Rule {....}
+        "-out:{eta_bin_path}"
+    ]                            # command beeing ran 
+    |> execute                   # runs the commands and returns success status
+    |> produces eta_bin_path;    # checks if the file exists if yes successfully returns Rule {....}
 
 
-    eta_artifact -> Artifact = artifact     # function to produce Artifact {....}
-                            :eta_bin        # unique ID
-                            .executable     # type 
-                            eta_step;       # rule(s) to execute
+    eta_artifact -> Artifact = artifact         # function to produce Artifact {....}
+                                :eta_bin        # unique ID
+                                .executable     # type 
+                                eta_step;       # rule(s) to execute
 
     run = eta_artifact          # depends on eta_bin runs it which returns an Artifact
             |> execute          # artifact of type executable is executable
