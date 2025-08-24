@@ -12,7 +12,7 @@ let
 
     odin_bin = builtin.find_program("odin");
 
-    eta_step -> Rule = [
+    fn eta_step -> Rule = [
         odin_bin.path(), 
         "build", src_dir,
         "-collection:{project}={src_dir}",
@@ -22,12 +22,12 @@ let
     |> produces eta_bin_path;    # checks if the file exists if yes successfully returns Rule {....}
 
 
-    eta_artifact -> Artifact = artifact         # function to produce Artifact {....}
-                                :eta_bin        # unique ID
-                                .executable     # type 
-                                eta_step;       # rule(s) to execute
+    fn eta_artifact -> Artifact = artifact          # function to produce Artifact {....}
+                                    :eta_bin        # unique ID
+                                    .executable     # type 
+                                    eta_step;       # rule(s) to execute
 
-    run = eta_artifact          # depends on eta_bin runs it which returns an Artifact
-            |> execute          # artifact of type executable is executable
+    fn run = eta_artifact           # depends on eta_bin runs it which returns an Artifact
+                |> execute          # artifact of type executable is executable
 in 
  {build, run}
