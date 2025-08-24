@@ -22,12 +22,12 @@ let
     |> produces eta_bin;    # checks if the file exists if yes successfully returns Rule {....}
 
 
-    eta_bin -> Artifact = artifact          # function to produce Artifact {....}
+    eta_artifact -> Artifact = artifact     # function to produce Artifact {....}
                             :eta_bin        # unique ID
                             .executable     # type 
                             eta_step;       # rule(s) to execute
 
-    run = eta_bin       # depends on eta_bin runs it which returns an Artifact
-            |> execute  # artifact of type executable is executable
+    run = eta_artifact          # depends on eta_bin runs it which returns an Artifact
+            |> execute          # artifact of type executable is executable
 in 
  {build, run}
