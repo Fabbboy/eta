@@ -2,22 +2,32 @@ let
     # can't <str> + <str>
     # use concat operator `++`
 
-    builtin = import :builtin
+    builtin = import :builtin;
 
-    project = :eta
+    project = :eta;
     
-    work_dir = builtin.cwd
-    src_dir = work_dir ++ "/" ++ project
-    eta_bin = work_dir ++ "/" ++ project ++ ".exe"
+    work_dir = builtin.cwd;
+    src_dir = work_dir ++ "/" ++ project;
+    eta_bin = work_dir ++ "/" ++ project ++ ".exe";
 
-    odin_bin = builtin.find_program("odin")
+    odin_bin = builtin.find_program("odin");
 
-    build = builtin.run([
+    eta_step -> Rule = [
         odin_bin.path(), 
         "build", src_dir,
         "-collection:{project}={src_dir}",
         "-out:{eta_bin}"
-    ])
-    run = builtin.run(eta_bin)
+    ]                       # command beeing ran 
+    |> execute              # runs the commands and returns success status
+    |> produces eta_bin;    # checks if the file exists if yes successfully returns Rule {....}
+
+
+    eta_bin -> Artifact = artifact          # function to produce Artifact {....}
+                            :eta_bin        # unique ID
+                            .executable     # type 
+                            eta_step;       # rule(s) to execute
+
+    run = eta_bin       # depends on eta_bin runs it which returns an Artifact
+            |> execute  # artifact of type executable is executable
 in 
  {build, run}
