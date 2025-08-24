@@ -4,7 +4,7 @@ CWD := $(shell pwd)
 SRC_DIR := $(CWD)/$(PROJECT)
 OUT_DIR := $(CWD)/out
 
-TARGET := $(OUT_DIR)/$(PROJECT)
+TARGET := $(OUT_DIR)/$(PROJECT).exe
 
 SOURCES := \
 	$(SRC_DIR)/main.c
