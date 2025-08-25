@@ -9,52 +9,47 @@ ETA is a lazily evaluated meta-build system that allows you to describe build pr
 ## Architecture
 
 The project consists of:
-- **Build system core** (C implementation): `eta/main.c` - Currently minimal, just contains an empty main function
-- **Build definition language**: `build.eta` - Contains the declarative build configuration using a functional language syntax
-- **Traditional build fallback**: `Makefile` - Standard C compilation setup
+- **Build system core** (C implementation): `eta/main.c` - Currently minimal empty main function
+- **Memory management**: `eta/arena.h` and `eta/arena.c` - Arena allocator with chunked memory management
+- **Build definition language**: `build.eta` - Demonstrates the intended declarative build syntax using functional programming concepts
+- **Dependencies**: Uses the `muc` library (included as subproject)
 
-The `build.eta` file demonstrates the intended meta-build system syntax:
-- Uses functional programming concepts with `let` bindings and functions
-- Defines build steps as Rules that can be executed and produce artifacts
-- Supports lazy evaluation and dependency management
-- Imports builtin functions for system integration
+The `build.eta` file shows the intended meta-build system syntax:
+- Uses functional programming with `let` bindings and function definitions
+- Defines build steps as Rules that execute commands and produce artifacts  
+- Currently targets Odin language compilation but the C implementation will interpret this
+- Supports lazy evaluation and dependency management through builtin functions
 
 ## Common Development Commands
 
 ### Building
 ```bash
-# Build using Make (current working method)
-make build
+# Build using Meson
+meson setup builddir
+meson compile -C builddir
+
+# Install the executable
+meson install -C builddir
 
 # Clean build artifacts
-make clean
-
-# Build and run
-make run
-
-# Verbose build output
-make V=1 build
+rm -rf builddir
 ```
 
 ### Project Structure
-- `eta/` - Source code directory (C implementation)
-- `out/` - Build output directory
-- `build.eta` - Meta-build system definition
+- `eta/` - C source code (main.c, arena implementation, utils.h)
+- `build.eta` - Meta-build system definition demonstrating the target language
+- `subprojects/muc/` - Memory utilities and common functionality library
+- `meson.build` - Build configuration (C11 standard, warning level 3)
 
 ## Build System Details
 
-The current implementation uses a hybrid approach:
-1. **Makefile**: Provides immediate C compilation functionality using clang
-2. **build.eta**: Defines the future meta-build system that will replace traditional build tools
+The project uses Meson as the build system with:
+- C11 standard compliance
+- Warning level 3 for strict compilation
+- Dependency on `muc` library for memory management utilities
+- The `muc` subproject provides allocators, options, and platform abstractions
 
-The `build.eta` file shows the intended architecture where:
-- `eta_step` defines build rules with commands and file dependencies
-- `eta_artifact` wraps build steps into executable artifacts
-- The system supports lazy evaluation and dependency tracking
-
-## Development Notes
-
-- The project uses clang as the default C compiler
-- Debug symbols are enabled (`-g` flag)
-- No package.json exists - this is a C project with a custom build system definition
-- The main C source is minimal, suggesting the project is in early development
+The arena allocator (`eta/arena.h`) implements chunked memory management:
+- 4KB chunks with linked list structure
+- Tracks current and first chunks for efficient allocation
+- Designed for the meta-build system's memory needs
