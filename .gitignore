@@ -4,6 +4,7 @@ out/
 *.o
 *.so
 *.a
+build*
 
 # Debug files
 *.dSYM/
